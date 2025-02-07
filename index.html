@@ -1,67 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>scan code test</title>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 </head>
 <body>
-  <header>Test LIFF ScancodeV2</header>
-  <main>
-    <h1>Start to get barcode</h1>
-    <button id="buttonScan">Click here to scan</button>
-    <div id="result"></div>
-  </main>
-  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script>
+    test
+    <script>
+        window.onload = function() {
+            const defaultLiffId = "2006875297-LQMvrmZx";
+            initializeLiff(defaultLiffId);
+        };
 
-const LIFF_ID = '2006875297-LQMvrmZx'; //h.a ID
-// https://liff.line.me/2004747517-A4qWNO9d
-
-//-----------------------------------------------
-function liff_startScanner() {
-  liff.scanCodeV2()
-    .then((result) => {
-      document.getElementById('result').textContent = result.value;
-      console.log(result.value)
-    })
-    .catch((err) => {
-      // console.log(err);
-      location.replace(`/error.html?err=barcode`);
-    });
-};
-
-// LIFF初期化
-function liff_init() {
-  liff
-    .init({liffId: LIFF_ID})
-    .then(() => {
-      // LIFF用の処理はここに書く
-      console.log('liff initted', location.href)
-      if (!liff.isLoggedIn()) {
-        liff.login({redirectUri: location.href});
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      location.replace(`/error.html?err=common`);
-      // $('#log')[0].innerText = 'LIFF init failed.\n' + err;
-    });
-}
-
-liff_init();
-
-//-----------------------------------------------
-$(function () {
-  // setExplanationState(0);
-
-  $('#buttonScan').click(function () {
-    // setExplanationState(1);
-    liff_startScanner();
-  });
-});
-
-  </script>
+        function initializeLiff(defaultLiffId) {
+            liff.init({ liffId: defaultLiffId })
+            .then(() => {
+                console.log("LIFF init succeeded.");
+            })
+            .catch((err) => {
+                console.log("LIFF init failed.");
+            });
+        }
+    </script>
 </body>
 </html>
