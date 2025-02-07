@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>scan code test</title>
+    <title>ทดสอบสแกนโค้ด</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 </head>
 <body>
-    test
+    <button id="scanButton" onclick="scanCode()">สแกน QR โค้ด</button>
+    <p id="scanResult"></p>
+
     <script>
         window.onload = function() {
             const defaultLiffId = "2006875297-LQMvrmZx";
@@ -19,9 +21,31 @@
             liff.init({ liffId: defaultLiffId })
             .then(() => {
                 console.log("LIFF init succeeded.");
+                // Check if app is running in LIFF browser
+                if (!liff.isInClient()) {
+                    alert('กรุณาเปิดแอพพลิเคชันนี้ในเบราว์เซอร์ LINE LIFF');
+                }
             })
             .catch((err) => {
                 console.log("LIFF init failed.");
+                console.error(err);
+            });
+        }
+
+        function scanCode() {
+            if (!liff.isInClient()) {
+                alert('กรุณาเปิดแอพพลิเคชันนี้ในเบราว์เซอร์ LINE LIFF');
+                return;
+            }
+
+            liff.scanCode()
+            .then(result => {
+                const scanResult = document.getElementById('scanResult');
+                scanResult.textContent = "ผลการสแกน: " + result.value;
+            })
+            .catch(err => {
+                console.log("scanCode failed!");
+                console.error(err);
             });
         }
     </script>
