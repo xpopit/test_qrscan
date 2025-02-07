@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <header>Test LIFF ScancodeV2</header>
+  <main>
+    <h1>Start to get barcode</h1>
+    <button id="buttonScan">Click here to scan</button>
+    <div id="result"></div>
+  </main>
+  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script>
+
+const LIFF_ID = '2004747517-A4qWNO9d'; //h.a ID
+// https://liff.line.me/2004747517-A4qWNO9d
+
+//-----------------------------------------------
+function liff_startScanner() {
+  liff.scanCodeV2()
+    .then((result) => {
+      document.getElementById('result').textContent = result.value;
+      console.log(result.value)
+    })
+    .catch((err) => {
+      // console.log(err);
+      location.replace(`/error.html?err=barcode`);
+    });
+};
+
+// LIFF初期化
+function liff_init() {
+  liff
+    .init({liffId: LIFF_ID})
+    .then(() => {
+      // LIFF用の処理はここに書く
+      console.log('liff initted', location.href)
+      if (!liff.isLoggedIn()) {
+        liff.login({redirectUri: location.href});
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      location.replace(`/error.html?err=common`);
+      // $('#log')[0].innerText = 'LIFF init failed.\n' + err;
+    });
+}
+
+liff_init();
+
+//-----------------------------------------------
+$(function () {
+  // setExplanationState(0);
+
+  $('#buttonScan').click(function () {
+    // setExplanationState(1);
+    liff_startScanner();
+  });
+});
+
+  </script>
+</body>
+</html>
